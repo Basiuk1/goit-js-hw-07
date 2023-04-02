@@ -31,8 +31,23 @@ function onGalleryClick(evt) {
   if (!evt.target.classList.contains("gallery__image")) {
     return;
   }
-  const instance = basicLightbox.create(`
-    <img src="${evt.target.dataset.source}" width="800" height="600">
-  `);
+  const instance = basicLightbox.create(
+    `<img src="${evt.target.dataset.source}" width="800" height="600">`,
+    {
+      onShow: () => {
+        document.addEventListener("keydown", pressKeyEsc);
+      },
+      onClose: () => {
+        document.removeEventListener("keydown", pressKeyEsc);
+      },
+    }
+  );
+
+  const pressKeyEsc = (event) => {
+    if (event.key === "Escape") {
+      instance.close();
+    }
+  };
+
   instance.show();
 }
